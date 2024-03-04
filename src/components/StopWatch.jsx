@@ -1,102 +1,46 @@
-/* eslint-disable react/prop-types */
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import moment from "moment";
 
-const Stopwatch = ({
-  stopwatchActive,
-  handleStopwatchStart,
-  handleStopwatchStop,
-  stopwatchTime,
-  setStopwatchTime,
-}) => {
+function Stopwatch() {
+  const [time, setTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
   useEffect(() => {
     let interval;
-
-    if (stopwatchActive) {
+    if (isRunning) {
       interval = setInterval(() => {
-        setStopwatchTime((prevTime) => prevTime + 10);
+        setTime((prevTime) => prevTime + 10);
       }, 10);
     } else {
       clearInterval(interval);
     }
-
     return () => clearInterval(interval);
-  }, [stopwatchActive, setStopwatchTime]);
+  }, [isRunning]);
 
-  const formatTime = (timeInMillis) => {
-    const milliseconds = Math.floor(timeInMillis % 1000);
-    const seconds = Math.floor((timeInMillis / 1000) % 60);
-    const minutes = Math.floor((timeInMillis / (1000 * 60)) % 60);
-    const hours = Math.floor((timeInMillis / (1000 * 60 * 60)) % 24);
-
-    const formattedMilliseconds = ("00" + milliseconds).slice(-3).slice(0, 2);
-
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          color: "#fff",
-          fontFamily: "monospace",
-          fontSize: "45px",
-        }}
-      >
-        <span>{hours}</span> &nbsp;<span>:</span> &nbsp;
-        <span>{minutes}</span> &nbsp;<span>:</span> &nbsp;
-        <span>{seconds}</span>&nbsp;<span>:</span> &nbsp;
-        <span style={{ fontSize: "0.8em" }}>{formattedMilliseconds}</span>&nbsp;
-      </div>
-    );
+  const startStopStopwatch = () => {
+    setIsRunning((prevIsRunning) => !prevIsRunning);
   };
 
-  const handleToggle = () => {
-    if (!stopwatchActive) {
-      handleStopwatchStart();
-    } else {
-      handleStopwatchStop();
-    }
-  };
-
-  const handleReset = () => {
-    setStopwatchTime(0);
-    handleStopwatchStop();
+  const resetStopwatch = () => {
+    setTime(0);
+    setIsRunning(false);
   };
 
   return (
-    <div>
-      {formatTime(stopwatchTime)}
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}
-      >
-        <button
-          onClick={handleToggle}
-          style={{
-            backgroundColor: "#333",
-            color: "#fff",
-            border: "none",
-            padding: "10px",
-            borderRadius: "5px",
-            marginRight: "10px",
-            fontSize: "30px",
-          }}
-        >
-          {stopwatchActive ? "Stop" : "Start"}
-        </button>
-        <button
-          onClick={handleReset}
-          style={{
-            backgroundColor: "#333",
-            color: "#fff",
-            border: "none",
-            padding: "10px",
-            borderRadius: "5px",
-            fontSize: "30px",
-          }}
-        >
-          Reset
-        </button>
+    <div className="stopwatch">
+      <div>
+        <span>{moment.utc(time).format("HH[h]-mm[m]-ss[s]")}</span>
+
       </div>
+      <button
+        className={isRunning ? "active" : ""}
+        onClick={startStopStopwatch}
+      >
+        {isRunning ? "Stop" : "Start"}
+      </button>
+      <button onClick={resetStopwatch}>Reset</button>
     </div>
   );
-};
+}
 
 export default Stopwatch;

@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron&display=swap");
+
+body {
+  font-family: "Orbitron", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #1f1f1f;
+  color: #2050b8;
+  font-size: 28px;
+}
+
+.App {
+  font-family: "Orbitron", sans-serif;
+  background-color: #14161e81;
+  max-width: 800px;
+  min-height: 360px;
+  margin: 0 auto;
+}
+
+.toggle-buttons button {
+  font-family: "Orbitron", sans-serif;
+  min-width: 360px;
+  font-size: 1.8em;
+  padding: 15px 30px;
+  margin: 0 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #3f3e3e;
+  color: rgba(255, 255, 255, 0.372);
+  cursor: pointer;
+}
+
+.toggle-buttons button:hover {
+  background-color: #666;
+  color:white;
+}
+
+.toggle-buttons button.active {
+  background-color: #0322bcb3;
+  color: white;
+}
+
+.timer button,
+.stopwatch button {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1em;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  background-color: #3f3e3e;
+  color: rgba(255, 255, 255, 0.372);
+  border: none;
+  cursor: pointer;
+min-width: 210px;
+}
+
+.timer button:hover,
+.stopwatch button:hover {
+  background-color: #666;
+  color: #ffffff;
+}
+
+.timer button.active,
+.stopwatch button.active {
+  background-color: #980202;
+  color: rgba(255, 255, 255, 0.866);
+}
+
+.timer button.active:hover,
+.stopwatch button.active:hover {
+  background-color: rgb(228, 20, 1);
+  color: white;
+}
+
+.timer div,
+.stopwatch div {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+.visible {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .App {
+    height: auto;
+    max-width: 100%;
+  }
+}
+
+
+
+
