@@ -13,18 +13,25 @@ function Timer() {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
-        if (seconds === 0 && minutes === 0 && hours === 0) {
+        if (hours === 0 && minutes === 0 && seconds === 0) {
           clearInterval(interval);
           setIsRunning(false);
         } else {
           if (seconds === 0) {
             if (minutes === 0) {
-              setHours((prevHours) => Math.max(0, prevHours - 1));
-              setMinutes(59);
+              if (hours === 0) {
+                clearInterval(interval);
+                setIsRunning(false);
+                return;
+              } else {
+                setHours((prevHours) => prevHours - 1);
+                setMinutes(59);
+                setSeconds(59);
+              }
             } else {
               setMinutes((prevMinutes) => prevMinutes - 1);
+              setSeconds(59);
             }
-            setSeconds(59);
           } else {
             setSeconds((prevSeconds) => prevSeconds - 1);
           }
@@ -49,32 +56,15 @@ function Timer() {
           setHours(Math.min(99, Math.max(0, value)));
           break;
         case "minutes":
-          let convertedMinutes = value;
-          let convertedHours = 0;
-          if (convertedMinutes >= 60) {
-            convertedHours = Math.floor(convertedMinutes / 60);
-            convertedMinutes %= 60;
-          }
-          setMinutes(Math.min(59, Math.max(0, convertedMinutes)));
-          setHours(Math.min(99, Math.max(0, hours + convertedHours)));
+          const totalMinutes = Math.min(9999, Math.max(0, value));
+          setHours(Math.floor(totalMinutes / 60));
+          setMinutes(totalMinutes % 60);
           break;
         case "seconds":
-          let convertedSeconds = value;
-          let remainingSeconds = 0;
-          let convertedMinutesFromSeconds = 0;
-          if (convertedSeconds >= 60) {
-            convertedMinutesFromSeconds = Math.floor(convertedSeconds / 60);
-            remainingSeconds = convertedSeconds % 60;
-          }
-          setSeconds(Math.min(59, Math.max(0, remainingSeconds)));
-          let updatedMinutes = minutes + convertedMinutesFromSeconds;
-          let updatedHoursFromMinutes = 0;
-          if (updatedMinutes >= 60) {
-            updatedHoursFromMinutes = Math.floor(updatedMinutes / 60);
-            updatedMinutes %= 60;
-          }
-          setMinutes(Math.min(59, Math.max(0, updatedMinutes)));
-          setHours(Math.min(99, Math.max(0, hours + updatedHoursFromMinutes)));
+          const totalSeconds = Math.min(359999, Math.max(0, value));
+          setHours(Math.floor(totalSeconds / 3600));
+          setMinutes(Math.floor((totalSeconds % 3600) / 60));
+          setSeconds(totalSeconds % 60);
           break;
         default:
           break;
@@ -100,7 +90,6 @@ function Timer() {
       </div>
       <div onClick={() => handleTimeClick("minutes")} style={{ display: "inline-block", cursor: "text" }}>
         <span contentEditable={activePart === "minutes"} suppressContentEditableWarning onBlur={handleInputChange} ref={inputRef}>{String(minutes).padStart(2, "0")}</span>m-
-
       </div>
       <div onClick={() => handleTimeClick("seconds")} style={{ display: "inline-block", cursor: "text" }}>
         <span contentEditable={activePart === "seconds"} suppressContentEditableWarning onBlur={handleInputChange} ref={inputRef}>{String(seconds).padStart(2, "0")}</span>s
